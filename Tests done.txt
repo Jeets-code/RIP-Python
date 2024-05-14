@@ -1,0 +1,28 @@
+There weren't many tests done until config files were done. The only ones done by me before this were minor, mostly revolving around seeing how thread() worked
+After the config files were finished, I made 2servs1.cfg and 2servs2.cfg These were the primary test files for the first day.
+I used these to test that the cfg files read correctly, and to ensure that things could be sent from one demon to another without issue.
+Test: run from command line, one for each file.
+Results:
+Errors in code, mostly involving typos
+Only one thread running at once due to setting up threads wrong
+The local routing table sent ot the other router had the wrong values due to iterating over ports rather than items in the table.
+It eventually worked, both routers would send data to each other with expected values.
+
+Added 2servs3.cfg, and altered 2servs2 so that there is now a router connected to 2 but not 1 to see if information would propagate properly.
+Results:
+There wasn't a mechanism to stop the routers from just counting past 16, so poisoned reverse didn't do much
+It worked. Running 1 & 3 would mean both only had routing tables containing 2. Starting 2 and 1 & 3 would find each other
+
+Added Triangle.cfg 1, 2 & 3. It costs a lot to get from 2 to 3 so it will hopefully change its routing to go via 1.
+Results:
+Disaster. It didn't
+But then I fixed it and it did
+
+Used Triangle extensively to test timeout system.
+Results:
+The timeout system was annoying to make and didn't work a lot of the time. I changed a lot of things and try as I might it wouldn't work. 
+Then I added a system where routers would be forced to accept changes from the current nexthop, which fixed some things.
+It also caused the slight issue of causing all routers to send updates at light speed constantly, breaking timeout. 
+This was fixed by reading the specifications and changing routers to update only when a router 'dies'.
+At this point timeouts were half working. They would 'die' after a period of time and this bad news would propagate over the network.
+I then added a way for routers to reconnect, the router would save the last known metrics of a router when it died. This shockingly worked first go.

@@ -1,0 +1,6 @@
+Router Name is an integer
+Input ports must be > 1024 and < 64000
+Output ports are the same, in cfg files must be formatted as port-cost-routername
+Output ports is a dictionary saying {RouterName: port}
+Route table is dict {RouterName: (nexthop, cost)}
+Route table includes connected tables during setup
